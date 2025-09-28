@@ -43,7 +43,13 @@ gitops-eks-project/
 │   ├── variables.tf
 │   ├── outputs.tf
 │   ├── provider.tf
-│   └── ...
+│   ├── argocd.tf
+│   ├── data.tf
+│   ├── eks-cluster.tf
+│   ├── eks-nodegroup.tf
+│   ├── iam.tf
+│   └── locals.tf
+│   
 │
 │── Jenkins_App/            # Application + CI/CD config
 │   ├── src/main/java/...   # Java source code
@@ -53,6 +59,11 @@ gitops-eks-project/
 │   └── pom.xml             # Maven build file
 │
 └── README.md               # Documentation
+
+
+argocd.tf  eks-cluster.tf    iam.tf     main.tf     providers.tf       
+data.tf    eks-nodegroup.tf  locals.tf  outputs.tf  variables.tf
+
 ```
 # ⚙️ Setup Instructions #
 1. Provision Infrastructure

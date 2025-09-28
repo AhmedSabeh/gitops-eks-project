@@ -1,42 +1,42 @@
-🚀 GitOps EKS Project with Jenkins, ArgoCD, and Terraform
-📌 Overview
+# GitOps EKS Project with Jenkins, ArgoCD, and Terraform #
 
-This project demonstrates a GitOps workflow on AWS EKS using:
+## 📌 Overview ##
 
-Terraform → Provision AWS infrastructure (EKS, nodes).
+-  This project demonstrates a GitOps workflow on AWS EKS using:
 
-Jenkins → CI pipeline (build app, build Docker image, push to registry, update manifests).
+-  Terraform → Provision AWS infrastructure (EKS, nodes).
 
-ArgoCD → CD tool (sync manifests from GitHub to Kubernetes).
+-  Jenkins → CI pipeline (build app, build Docker image, push to registry, update manifests).
 
-The app used is from Jenkins_App
-, a simple Java Spring Boot application.
+-  ArgoCD → CD tool (sync manifests from GitHub to Kubernetes).
 
-🏗️ Architecture
 
-Terraform provisions:
+## 🏗️ Architecture ##
 
-EKS cluster (multi-AZ, high availability).
+-  Terraform provisions:
 
-Worker nodes in default VPC.
+-  EKS cluster (multi-AZ, high availability).
 
-IAM roles and Kubernetes configuration.
+-  Worker nodes in default VPC.
 
-Jenkins Pipeline automates:
+-  IAM roles and Kubernetes configuration.
 
-Build Java app using Maven.
+-  Jenkins Pipeline automates:
 
-Build Docker image.
+-  Build Java app using Maven.
 
-Push Docker image to DockerHub.
+-  Build Docker image.
 
-Update Kubernetes deployment.yaml with the new image tag.
+-  Push Docker image to DockerHub.
 
-Push changes back to GitHub.
+-  Update Kubernetes deployment.yaml with the new image tag.
 
-ArgoCD watches the repo and automatically deploys new changes to the cluster.
+-  Push changes back to GitHub.
+
+-  ArgoCD watches the repo and automatically deploys new changes to the cluster.
 
 📂 Folder Structure
+```
 gitops-eks-project/
 │── terraform/              # Terraform code for EKS + infrastructure
 │   ├── main.tf
@@ -53,64 +53,59 @@ gitops-eks-project/
 │   └── pom.xml             # Maven build file
 │
 └── README.md               # Documentation
-
-⚙️ Setup Instructions
+```
+# ⚙️ Setup Instructions #
 1. Provision Infrastructure
+```
 cd terraform
 terraform init
 terraform apply -auto-approve
-
+```
 2. Configure kubectl
+```
 aws eks update-kubeconfig --region <your-region> --name <eks-cluster-name>
 kubectl get nodes
-
+```
 3. Install ArgoCD
+```
 kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
+```
 
 Expose ArgoCD:
 
+```
 kubectl port-forward svc/argocd-server -n argocd 8080:443
-
-
 Login via: https://localhost:8080
-
+```
 4. Setup Jenkins Pipeline
 
-Open Jenkins UI → New Item → Pipeline.
+   *  Open Jenkins UI → New Item → Pipeline.
 
-Select Pipeline script from SCM.
+   *  Select Pipeline script from SCM.
 
-Git Repo:
+   *  Git Repo: ```https://github.com/AhmedSabeh/gitops-eks-project.git```
 
-https://github.com/AhmedSabeh/gitops-eks-project.git
+   *  Branch: main
 
-
-Branch: main
-
-Script Path:
-
-Jenkins_App/Jenkinsfile
+   *  Script Path: Jenkins_App/Jenkinsfile
 
 5. Verify GitOps Deployment
 
-ArgoCD will automatically sync changes.
-
+   *  ArgoCD will automatically sync changes.
+```
 kubectl get pods -n jenkins-app
 kubectl get svc -n jenkins-app
+```
 
+# Features #
 
-Access the application via the Service LoadBalancer.
+-  Fully automated CI/CD GitOps workflow.
 
-✅ Features
+-  High availability via multi-AZ EKS cluster.
 
-Fully automated CI/CD GitOps workflow.
+-  Low-cost setup using default VPC.
 
-High availability via multi-AZ EKS cluster.
+-  Infrastructure as Code (Terraform).
 
-Low-cost setup using default VPC.
-
-Infrastructure as Code (Terraform).
-
-Continuous Deployment with ArgoCD.
+-  Continuous Deployment with ArgoCD.

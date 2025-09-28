@@ -23,7 +23,7 @@ jobs:
         run: mvn -B clean package --file App/pom.xml
 
       - name: Upload JAR artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-jar
           path: App/target/*.jar

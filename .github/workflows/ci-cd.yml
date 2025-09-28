@@ -21,3 +21,10 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B clean package --file App/pom.xml
+
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-jar
+          path: App/target/*.jar
+

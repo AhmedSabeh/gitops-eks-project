@@ -135,14 +135,6 @@ kubectl get svc -n app
 
 ## ScreenShots ##
 
-<img width="1182" height="480" alt="Screenshot (294)" src="https://github.com/user-attachments/assets/101d3839-2b8c-40cc-a275-d2a6c046ff76" />
-<img width="1182" height="481" alt="Screenshot (295)" src="https://github.com/user-attachments/assets/4421051a-44e1-47c0-a26b-5dcef15dcbd6" />
-<img width="1183" height="461" alt="Screenshot (296)" src="https://github.com/user-attachments/assets/fb6ca788-d86e-4d5a-bbae-63ed2e624e6e" />
-
-- Some informations after creating the eks cluster
-
----
-
 <img width="982" height="474" alt="Screenshot (293)" src="https://github.com/user-attachments/assets/24809a8d-8d64-41fd-8f74-2bda67bc279a" />
 
 -  Output of ```kubectl get pods -n argocd ```
@@ -153,6 +145,15 @@ kubectl get svc -n app
 -  Shows the ArgoCD dashboard with app Healthy & Synced
 
 ---
-<img width="1366" height="446" alt="Screenshot (297)" src="https://github.com/user-attachments/assets/eb40673a-4ff8-48a2-acc6-79b781430370" />
+<img width="1366" height="588" alt="Screenshot (298)" src="https://github.com/user-attachments/assets/43e42ba0-e5a5-4c05-b55f-d5795228b8ff" />
+
+-  Shows the workflow after a successful build & push
+
+-  Confirms Docker image has been tagged and pushed to ECR
+
+-  Confirms CI/CD pipeline completed without errors
+
+---
+<img width="1366" height="446" alt="Screenshot (297)" src="https://github.com/user-attachments/assets/4fa40cc1-f14c-415f-a330-3d4da4a0ffe5" />
 
 -  Successful CI build and Docker image pushed to ECR

@@ -1,7 +1,10 @@
-name: CI/CD Pipeline to ECR
+name: CI/CD Pipeline to ECR & ArgoCD
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -10,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -21,17 +24,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # 3️⃣ Build the Maven project
+      # 3️⃣ Build Maven project
       - name: Build with Maven
         run: mvn -B clean package --file App/pom.xml
 
-      # 4️⃣ Upload the JAR as artifact
+      # 4️⃣ Upload JAR artifact (optional)
       - name: Upload JAR artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-jar
           path: App/target/*.jar
 
+      # 5️⃣ Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -39,17 +43,31 @@ jobs:
           aws-secret-access-key: ${{ secrets.SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      # 6️⃣ Log in to ECR
+      # 6️⃣ Log in to Amazon ECR
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 7️⃣ Build and push Docker image to ECR
-      - name: Build, tag, and push Docker image
+      # 7️⃣ Build, tag, and push Docker image to ECR
+      - name: Build and push Docker image
         run: |
           IMAGE_URI=${{ secrets.ECR_REPOSITORY }}
           TAG=${GITHUB_SHA::7}
           docker build -t $IMAGE_URI:$TAG App
           docker push $IMAGE_URI:$TAG
           echo "IMAGE=$IMAGE_URI:$TAG" >> $GITHUB_ENV
+
+      # 8️⃣ Update deployment.yaml with new image tag
+      - name: Update deployment manifest
+        run: |
+          sed -i "s|image:.*|image: $IMAGE|" App/deployment.yaml
+
+      # 9️⃣ Commit and push the updated deployment.yaml
+      - name: Commit and push deployment manifest
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add App/deployment.yaml
+          git diff-index --quiet HEAD || git commit -m "Update deployment image to $IMAGE"
+          git push
 
